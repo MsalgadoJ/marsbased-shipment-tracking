@@ -37,8 +37,8 @@ Data flow: `raw events (≤ demo clock)` → adapters → `consolidate` → `ris
 
 | # | Step | Box | Acceptance criteria |
 |---|---|---|---|
-| 0 | Scaffold Next.js + Tailwind + shadcn + Vitest; README run instructions; first commit | 0.25 h | `pnpm dev`, `pnpm test`, `pnpm build` pass |
-| 1 | Domain types + canonical vocabulary + synthetic data (3 sites, 4 operators with different raw shapes, 4 customers, ~25 shipments covering: domestic road, international road, road→sea→road with customs, delivered, on time, at risk, customs hold, stale, one unknown status) | 1 h | Every exception type and the persona perimeters are represented in the seed |
+| 0 | Scaffold Next.js + Tailwind + Vitest; README run instructions; first commit (shadcn/ui moved to step 4, when the first component needs it) | 0.25 h | `pnpm dev`, `pnpm test`, `pnpm build` pass |
+| 1 | Domain types + canonical vocabulary + synthetic data (3 sites, 5 operators with different raw shapes, 4 customers, ~25 shipments covering: domestic road, international road, road→sea→road with customs, delivered, on time, at risk, customs hold, stale, one unknown status) | 1 h | Every exception type and the persona perimeters are represented in the seed |
 | 2 | Adapters + consolidation + risk + ETA engine, with Vitest tests | 1.25 h | Tests cover each adapter, the unknown-status path, stale detection, and confirmed vs estimated ETA |
 | 3 | AI mock service (briefing, actions, drafts, NL query → filter, customer notice) | 0.75 h | NL parser handles the brief's examples ("shipments to France this week running late", "what's going on with order 12345?"); unparseable input says so instead of guessing |
 | 4 | Ops view: briefing, exception queue, NL search with editable chips, portfolio table, detail page with timeline and raw events, approve/edit drafted action | 1.5 h | Full ops demo path works end to end |
