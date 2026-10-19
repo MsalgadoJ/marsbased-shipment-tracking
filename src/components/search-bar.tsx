@@ -76,7 +76,11 @@ export function SearchBar({
           <Search className="pointer-events-none absolute top-2.5 left-3 size-4 text-slate-400" aria-hidden />
           <input
             value={text}
-            onChange={(e) => setText(e.target.value)}
+            onChange={(e) => {
+              // Emptying the box by hand resets the table, like the clear button does.
+              if (e.target.value.trim() === "") clear();
+              else setText(e.target.value);
+            }}
             placeholder="Ask in plain language, e.g. shipments to France this week running late"
             className="w-full rounded-lg border border-slate-300 bg-white py-2 pr-9 pl-9 text-sm shadow-sm focus:border-slate-500 focus:outline-none"
           />
