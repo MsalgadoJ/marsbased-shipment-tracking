@@ -2,19 +2,11 @@
 
 import { useEffect, useEffectEvent, useMemo, useState } from "react";
 import { withLatency } from "@/ai";
-import type { Persona } from "@/data/personas";
 import { RAW_EVENTS, SHIPMENTS } from "@/data/shipments";
 import { iso } from "@/data/time";
-import type { ShipmentSnapshot } from "@/domain/types";
+import { scopeSnapshots } from "@/engine/scope";
 import { buildSnapshots, byUrgency } from "@/engine/snapshot";
 import { useDemo, usePersona } from "./demo";
-
-/** The persona's perimeter. The only place where visibility is decided. */
-export function scopeSnapshots(snapshots: ShipmentSnapshot[], persona: Persona): ShipmentSnapshot[] {
-  return persona.kind === "ops"
-    ? snapshots.filter((s) => persona.siteIds.includes(s.shipment.originSiteId))
-    : snapshots.filter((s) => s.shipment.customerId === persona.customerId);
-}
 
 /** Current clock as ISO plus the persona-scoped read model, most urgent first. */
 export function usePortfolio() {

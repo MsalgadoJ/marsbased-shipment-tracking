@@ -26,8 +26,8 @@ export function AppHeader() {
         <Link href="/" className="font-semibold text-slate-900">
           {COMPANY} <span className="font-normal text-slate-500">· Shipment tracking</span>
         </Link>
-        <label className="flex items-center gap-2 text-sm">
-          <span className="text-slate-500">Viewing as</span>
+        <label className="flex w-full min-w-0 items-center gap-2 text-sm sm:w-auto">
+          <span className="shrink-0 text-slate-500">Viewing as</span>
           <select
             value={persona.id}
             onChange={(e) => {
@@ -35,7 +35,7 @@ export function AppHeader() {
               setPersona(next.id);
               router.push(homeOf(next));
             }}
-            className="rounded-md border border-slate-300 bg-white px-2 py-1 text-sm"
+            className="min-w-0 flex-1 truncate rounded-md border border-slate-300 bg-white px-2 py-1 text-sm"
           >
             {(["ops", "customer"] as const).map((kind) => (
               <optgroup key={kind} label={kind === "ops" ? "Operations" : "Customers"}>
