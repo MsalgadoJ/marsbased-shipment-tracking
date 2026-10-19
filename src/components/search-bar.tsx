@@ -6,7 +6,6 @@ import { useState } from "react";
 import { mockAi, withLatency, type ParsedQuery } from "@/ai";
 import { FILTER_OPTIONS, filterChips, QUERY_EXAMPLES } from "@/ai/query";
 import type { ShipmentSnapshot } from "@/domain/types";
-import { SHIPMENTS } from "@/data/shipments";
 import type { ShipmentFilter } from "@/engine/filter";
 import { explainLookupMiss } from "@/engine/scope";
 import { usePersona } from "@/store/demo";
@@ -60,7 +59,7 @@ export function SearchBar({
   const lookup = parsed?.lookup && results.length === 1 ? results[0] : undefined;
   const miss =
     parsed?.lookup && filter && results.length === 0 && persona.kind === "ops"
-      ? explainLookupMiss(filter, persona, SHIPMENTS)
+      ? explainLookupMiss(filter, persona)
       : undefined;
 
   return (

@@ -23,13 +23,12 @@ describe("scopeSnapshots", () => {
 describe("explainLookupMiss", () => {
   const lucia = PERSONAS.find((p) => p.id === "lucia")! as Extract<(typeof PERSONAS)[number], { kind: "ops" }>;
 
-  it("says which site and colleague own a shipment outside the perimeter", () => {
-    expect(explainLookupMiss({ reference: "SH-1078" }, lucia, SHIPMENTS)).toBe(
-      "SH-1078 ships from the Aveiro factory, which is not one of your sites (Paterna factory and Zaragoza warehouse). Miguel Sousa handles it.",
+  it("gives the same answer for another site's shipment and for one that does not exist", () => {
+    expect(explainLookupMiss({ reference: "SH-1078" }, lucia)).toBe(
+      "SH-1078 is not in your sites (Paterna factory and Zaragoza warehouse).",
     );
-  });
-
-  it("says so when the shipment does not exist", () => {
-    expect(explainLookupMiss({ orderNumber: "99999" }, lucia, SHIPMENTS)).toBe("There is no order 99999 in the system. Check the number.");
+    expect(explainLookupMiss({ reference: "SH-9999" }, lucia)).toBe(
+      "SH-9999 is not in your sites (Paterna factory and Zaragoza warehouse).",
+    );
   });
 });
