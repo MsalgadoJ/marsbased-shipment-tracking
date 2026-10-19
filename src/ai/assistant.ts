@@ -301,7 +301,9 @@ export function explainShipment(s: ShipmentSnapshot): string {
   const sh = s.shipment;
   const last = s.milestones.at(-1);
   const where = last ? `Last update: ${lowerFirst(MILESTONES[last.code].label)} in ${last.location} on ${formatDay(last.at)}.` : "No movement reported yet.";
-  const issues = s.exceptions.length ? ` ${s.exceptions.map((e) => e.cause).join(". ")}.` : " No open issues.";
+  // Causes may already end in a full stop (or a quoted one), so each is closed only when needed.
+  const sentence = (t: string) => (/[.!?]["”]?$/.test(t) ? t : `${t}.`);
+  const issues = s.exceptions.length ? ` ${s.exceptions.map((e) => sentence(e.cause)).join(" ")}` : " No open issues.";
   const eta = s.eta.deliveredAt
     ? ` Delivered on ${formatDay(s.eta.deliveredAt)}.`
     : s.eta.confirmed

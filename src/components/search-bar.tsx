@@ -6,7 +6,10 @@ import { useState } from "react";
 import { mockAi, withLatency, type ParsedQuery } from "@/ai";
 import { FILTER_OPTIONS, filterChips, QUERY_EXAMPLES } from "@/ai/query";
 import type { ShipmentSnapshot } from "@/domain/types";
+import { SHIPMENTS } from "@/data/shipments";
 import type { ShipmentFilter } from "@/engine/filter";
+import { explainLookupMiss } from "@/engine/scope";
+import { usePersona } from "@/store/demo";
 import { AiTag, Badge, Button } from "./ui";
 
 type EditableKey = keyof typeof FILTER_OPTIONS;
@@ -53,7 +56,12 @@ export function SearchBar({
   }
 
   const chips = filter ? filterChips(filter) : [];
+  const persona = usePersona();
   const lookup = parsed?.lookup && results.length === 1 ? results[0] : undefined;
+  const miss =
+    parsed?.lookup && filter && results.length === 0 && persona.kind === "ops"
+      ? explainLookupMiss(filter, persona, SHIPMENTS)
+      : undefined;
 
   return (
     <div className="space-y-3">
@@ -136,6 +144,8 @@ export function SearchBar({
           )}
         </div>
       )}
+
+      {miss && <p className="rounded-md bg-slate-100 px-3 py-2 text-sm text-slate-700 ring-1 ring-slate-200">{miss}</p>}
 
       {lookup && (
         <div className="rounded-lg border border-violet-200 bg-violet-50/40 p-3 text-sm text-slate-800">
