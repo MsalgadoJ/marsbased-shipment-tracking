@@ -1,5 +1,6 @@
 import { operatorById } from "@/data/reference";
 import { addHours, dayDiff, dayKey, hoursBetween, HOUR } from "@/domain/dates";
+import { formatDay } from "@/domain/format";
 import type { Confidence, EtaView, Milestone, Mode, Shipment, UnmappedEvent } from "@/domain/types";
 import { activeCustomsHold, currentLegIndex } from "./consolidate";
 
@@ -75,7 +76,7 @@ export function computeEta(
   const departed = onCur.find((m) => !m.code.startsWith("customs_") && m.code !== "gate_in_port" && m.code !== "loaded_on_vessel");
   if (etaMilestone) {
     arrival = Date.parse(etaMilestone.operatorEta!);
-    reasons.push(`${operator.name} reported arrival at ${cur.to.name} on ${dayKey(etaMilestone.operatorEta!)}`);
+    reasons.push(`${operator.name} expects to reach ${cur.to.name} on ${formatDay(etaMilestone.operatorEta!)}`);
   } else if (departed) {
     arrival = Date.parse(departed.at) + dur(cur.plannedDeparture, cur.plannedArrival);
     reasons.push(`Planned transit time from the actual departure (${dayKey(departed.at)})`);

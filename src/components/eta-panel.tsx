@@ -4,7 +4,12 @@ import type { EtaView, Shipment } from "@/domain/types";
 import { confidenceRange, CUSTOMER_CONFIDENCE_HINT } from "./shipment-bits";
 import { AiTag, Badge } from "./ui";
 
-/** Confirmed date and estimate side by side, each with where it comes from. */
+/**
+ * The delivery date, never ambiguous about where it comes from. One date is shown: the operator's
+ * confirmation when there is one, otherwise the estimate. Operations also see the estimate next to
+ * a confirmation when the two disagree or the estimate has doubts (a quiet feed, an unread
+ * status), because that is a risk signal. Customers get one date.
+ */
 export function EtaPanel({ eta, shipment, showReasons = true }: { eta: EtaView; shipment: Shipment; showReasons?: boolean }) {
   if (eta.deliveredAt) {
     return (
@@ -17,46 +22,51 @@ export function EtaPanel({ eta, shipment, showReasons = true }: { eta: EtaView; 
       </div>
     );
   }
+  const { confirmed, estimate } = eta;
+  const disagree = Boolean(confirmed && estimate && formatDay(confirmed.date) !== formatDay(estimate.date));
+  const doubtful = Boolean(estimate && estimate.confidence !== "high");
+  const showEstimate = estimate && (!confirmed || (showReasons && (disagree || doubtful)));
+
   return (
-    <div className="grid gap-3 sm:grid-cols-2">
-      <div className="rounded-lg p-3 text-sm ring-1 ring-slate-200">
-        <div className="mb-1 flex items-center gap-2">
-          <Badge tone="ok">Confirmed</Badge>
-          <span className="text-xs text-slate-500">stated by the operator</span>
+    <div className={showEstimate && confirmed ? "grid gap-3 sm:grid-cols-2" : ""}>
+      {confirmed && (
+        <div className="rounded-lg p-3 text-sm ring-1 ring-slate-200">
+          <div className="mb-1 flex items-center gap-2">
+            <Badge tone="ok">Confirmed</Badge>
+            <span className="text-xs text-slate-500">stated by the operator</span>
+          </div>
+          <p className="text-lg font-semibold text-slate-900">{formatDay(confirmed.date)}</p>
+          <p className="text-xs text-slate-500">
+            {operatorById(confirmed.operatorId).name}, reported {formatDateTime(confirmed.reportedAt)} · planned{" "}
+            {formatDay(shipment.plannedDelivery)}
+          </p>
         </div>
-        {eta.confirmed ? (
-          <>
-            <p className="text-lg font-semibold text-slate-900">{formatDay(eta.confirmed.date)}</p>
-            <p className="text-xs text-slate-500">
-              {operatorById(eta.confirmed.operatorId).name}, reported {formatDateTime(eta.confirmed.reportedAt)}
-            </p>
-          </>
-        ) : (
-          <p className="text-slate-500">No delivery date confirmed by the operator of the final leg yet.</p>
-        )}
-      </div>
-      <div className="rounded-lg border border-dashed border-slate-300 p-3 text-sm">
-        <div className="mb-1 flex items-center gap-2">
-          <AiTag label="Estimate" />
-          {eta.estimate && <Badge tone={eta.estimate.confidence === "low" ? "medium" : "neutral"}>{eta.estimate.confidence} confidence</Badge>}
+      )}
+      {showEstimate && (
+        <div className="rounded-lg border border-dashed border-slate-300 p-3 text-sm">
+          <div className="mb-1 flex flex-wrap items-center gap-2">
+            <AiTag label="Estimate" />
+            <Badge tone={estimate.confidence === "low" ? "medium" : "neutral"}>{estimate.confidence} confidence</Badge>
+            <span className="text-xs text-slate-500">
+              {!confirmed ? "no operator has confirmed a date yet" : disagree ? "differs from the operator's date" : "the operator's date may not hold"}
+            </span>
+          </div>
+          <p className="text-lg font-semibold text-slate-700 italic">~{formatDay(estimate.date)}</p>
+          <p className="text-xs text-slate-500">
+            between {formatDay(estimate.earliest)} and {formatDay(estimate.latest)} · planned {formatDay(shipment.plannedDelivery)}
+          </p>
+          <p className="mt-1 text-xs text-slate-600">
+            {showReasons ? confidenceRange(estimate.confidence) : CUSTOMER_CONFIDENCE_HINT[estimate.confidence]}
+          </p>
+          {showReasons && estimate.reasons.length > 0 && (
+            <ul className="mt-2 list-disc space-y-0.5 pl-4 text-xs text-slate-600">
+              {estimate.reasons.map((r) => (
+                <li key={r}>{r}</li>
+              ))}
+            </ul>
+          )}
         </div>
-        {eta.estimate && (
-          <>
-            <p className="text-lg font-semibold text-slate-700 italic">~{formatDay(eta.estimate.date)}</p>
-            <p className="text-xs text-slate-500">
-              between {formatDay(eta.estimate.earliest)} and {formatDay(eta.estimate.latest)} · planned {formatDay(shipment.plannedDelivery)}
-            </p>
-            <p className="mt-1 text-xs text-slate-600">{showReasons ? confidenceRange(eta.estimate.confidence) : CUSTOMER_CONFIDENCE_HINT[eta.estimate.confidence]}</p>
-            {showReasons && eta.estimate.reasons.length > 0 && (
-              <ul className="mt-2 list-disc space-y-0.5 pl-4 text-xs text-slate-600">
-                {eta.estimate.reasons.map((r) => (
-                  <li key={r}>{r}</li>
-                ))}
-              </ul>
-            )}
-          </>
-        )}
-      </div>
+      )}
     </div>
   );
 }
