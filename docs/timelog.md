@@ -6,3 +6,4 @@ Budget: 8 h.
 |---|---|---|---|---|
 | 2026-10-16 | 19:00 | 19:10 | Research + Plan | Brief analysis, scope cut, plan |
 | 2026-10-16 | 19:10 | 19:21 | Steps 0-2 | Scaffold, domain + synthetic data, adapters, engine, 22 tests |
+| 2026-10-19 | 13:00 | 13:10 | Step 3 | AI mock: NL query → filter + chips, briefing, prioritised actions with drafts, customer notices; 35 tests |
