@@ -75,6 +75,7 @@ Five synthetic operators report in five shapes: JSON with Spanish codes, a porta
 **Assumptions**
 - One shipment is one order to one destination; no split or consolidated shipments.
 - Customers see operator names and the estimate's confidence (high / medium / low), but not the operational signals behind them: silent feeds, unrecognised status codes, the operators' raw messages, the reasons for an estimate, customs paperwork or the team's messages to operators.
+- The operations perimeter is by site. The brief also mentions account and role; those would be more conditions in the same perimeter function.
 - Customs is required for destinations outside the EU, and a missing certificate of origin is the typical blocker.
 
 **Limitations**
