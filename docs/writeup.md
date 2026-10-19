@@ -1,7 +1,7 @@
 # Shipment tracking prototype: write-up
 
 Mayra Rincones · MarsBased technical test · 19 October 2026  
-Repository: [github.com/MsalgadoJ/marsbased-shipment-tracking](https://github.com/MsalgadoJ/marsbased-shipment-tracking) · Demo script in the README
+Repository: [github.com/MsalgadoJ/marsbased-shipment-tracking](https://github.com/MsalgadoJ/marsbased-shipment-tracking) · Live: [marsbased-shipment-tracking.vercel.app](https://marsbased-shipment-tracking.vercel.app) · Demo script in the README
 
 ## 1. The cut I chose, and why
 

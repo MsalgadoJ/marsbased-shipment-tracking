@@ -4,6 +4,8 @@ Frontend prototype for the MarsBased technical test: consolidated, AI-assisted s
 
 All data is synthetic and all AI output is simulated behind the interfaces a real model would use. The write-up is in [`docs/writeup.md`](docs/writeup.md).
 
+Live: https://marsbased-shipment-tracking.vercel.app
+
 ## Run locally
 
 Requires Node 20+ and pnpm.
@@ -25,6 +27,16 @@ The demo clock starts on Monday 19 October 2026, 08:00 (Valencia). The clock, th
 4. **Search** with the examples under the search box: "shipments to France this week running late" becomes editable chips, and "what's going on with order 12345?" answers in place. Try something it cannot use to see it say so instead of guessing.
 5. **Move the clock** with "Next update" or "+12 h". The feed shows the operator updates that arrived; SH-1051 gets a confirmed one-day delay, others go stale, and deliveries complete.
 6. **Switch to Amelia Hart** (Kestrel Engineering) in "Viewing as". She sees only her shipments, a plain-language notice about the customs hold, and the message approved in step 3.
+
+## Checking it
+
+`pnpm test`, `pnpm lint` and `pnpm build` should pass. Beyond the demo script, these are the checks I ran by hand:
+
+- **Perimeter.** As Amelia, open `/customer/shipments/SH-1051` (another customer's): "Shipment not found". As Lucía, search `SH-1078` (an Aveiro shipment) and `SH-9999` (none): the same answer for both.
+- **Search.** "patata" is reported as not usable instead of guessed. Emptying the box or "Clear filters" brings back every shipment; switching persona starts a clean search.
+- **Dates.** SH-1042 shows only an estimate. SH-1051 shows the operator's date and, next to it, the estimate that doubts it. A customer always sees one date.
+- **State.** A reload or a typed URL keeps the clock, persona and sent messages; "Reset" goes back to Monday 08:00.
+- **Keyboard and mobile.** Tab reaches every control with a visible focus ring. At 390 px there is no horizontal scroll.
 
 ## Where things are
 
