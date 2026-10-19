@@ -3,15 +3,15 @@
 import { Clock, FastForward, RotateCcw, SkipForward } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { PERSONAS, type Persona } from "@/data/personas";
 import { COMPANY } from "@/data/reference";
 import { RAW_EVENTS, SHIPMENTS } from "@/data/shipments";
 import { iso } from "@/data/time";
 import { formatDateTime } from "@/domain/format";
 import { arrivals, hoursToNextArrival, type FeedItem } from "@/engine/feed";
-import { useDemo, usePersona } from "@/store/demo";
-import { Button, Card } from "./ui";
+import { useDemo, useDemoHydrated, usePersona } from "@/store/demo";
+import { Button, Card, Skeleton } from "./ui";
 
 const homeOf = (p: Persona) => (p.kind === "ops" ? "/ops" : "/customer");
 
@@ -20,22 +20,31 @@ export function AppHeader() {
   const setPersona = useDemo((s) => s.setPersona);
   const router = useRouter();
 
+  useEffect(() => {
+    useDemo.persist.rehydrate();
+  }, []);
+
   return (
-    <header className="border-b border-slate-200 bg-white">
+    <header className="border-t-[3px] border-b border-t-brand border-b-neutral-200 bg-white">
       <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3">
-        <Link href="/" className="font-semibold text-slate-900">
-          {COMPANY} <span className="font-normal text-slate-500">· Shipment tracking</span>
+        <Link href="/" className="font-semibold text-ink">
+          {COMPANY}
+          <span className="text-brand" aria-hidden>
+            .
+          </span>{" "}
+          <span className="font-normal text-neutral-500">· Shipment tracking</span>
         </Link>
         <label className="flex w-full min-w-0 items-center gap-2 text-sm sm:w-auto">
-          <span className="shrink-0 text-slate-500">Viewing as</span>
+          <span className="shrink-0 text-neutral-500">Viewing as</span>
           <select
             value={persona.id}
+            autoComplete="off"
             onChange={(e) => {
               const next = PERSONAS.find((p) => p.id === e.target.value)!;
               setPersona(next.id);
               router.push(homeOf(next));
             }}
-            className="min-w-0 flex-1 truncate rounded-md border border-slate-300 bg-white px-2 py-1 text-sm"
+            className="min-w-0 flex-1 truncate rounded-md border border-neutral-300 bg-white px-2 py-1 text-sm hover:border-neutral-500"
           >
             {(["ops", "customer"] as const).map((kind) => (
               <optgroup key={kind} label={kind === "ops" ? "Operations" : "Customers"}>
@@ -70,10 +79,10 @@ function DemoControls() {
   }
 
   return (
-    <div className="border-t border-dashed border-slate-200 bg-slate-50">
+    <div className="border-t border-dashed border-neutral-200 bg-neutral-50">
       <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-2 px-4 py-2 text-sm">
-        <span className="inline-flex items-center gap-1.5 font-medium text-slate-800">
-          <Clock className="size-4 text-slate-500" aria-hidden /> Demo clock: {formatDateTime(now)}
+        <span className="inline-flex items-center gap-1.5 font-medium text-neutral-800">
+          <Clock className="size-4 text-neutral-500" aria-hidden /> Demo clock: {formatDateTime(now)}
         </span>
         <Button variant="secondary" onClick={() => next && move(next)} disabled={!next} title="Jump to the next operator update">
           <SkipForward className="size-4" aria-hidden /> Next update
@@ -87,7 +96,7 @@ function DemoControls() {
           }} disabled={clockH === 0}>
           <RotateCcw className="size-4" aria-hidden /> Reset
         </Button>
-        <span aria-live="polite" className="text-xs text-slate-600">
+        <span aria-live="polite" className="text-xs text-neutral-600">
           {feed.length > 0 && (
             <>
               {feed.length} new update{feed.length > 1 ? "s" : ""}:{" "}
@@ -108,21 +117,29 @@ function DemoControls() {
 
 /** Shown when the current persona cannot see this area: the perimeter, enforced in the UI. */
 export function RequirePersona({ kind, children }: { kind: Persona["kind"]; children: ReactNode }) {
+  const hydrated = useDemoHydrated();
   const persona = usePersona();
   const setPersona = useDemo((s) => s.setPersona);
+  if (!hydrated) return <Skeleton className="h-64 w-full" />;
   if (persona.kind === kind) return children;
+  const area = kind === "ops" ? "operations" : "customer";
   return (
     <Card className="mx-auto max-w-lg p-6">
-      <p className="mb-4 text-sm text-slate-700">
-        {persona.name} can&apos;t see this area. Choose {kind === "ops" ? "an operations" : "a customer"} persona:
+      <h1 className="font-semibold text-ink">This is the {area} area</h1>
+      <p className="mt-1 mb-4 text-sm text-neutral-600">
+        You are viewing as {persona.name}, who {persona.kind === "ops" ? "works in operations" : "is a customer"} and
+        can&apos;t see it. Switch to {kind === "ops" ? "an operations" : "a customer"} persona to continue:
       </p>
       <div className="space-y-2">
         {PERSONAS.filter((p) => p.kind === kind).map((p) => (
           <Button key={p.id} className="w-full justify-start" onClick={() => setPersona(p.id)}>
-            {p.name} <span className="font-normal text-slate-500">· {p.title}</span>
+            {p.name} <span className="font-normal text-neutral-500">· {p.title}</span>
           </Button>
         ))}
       </div>
+      <Link href={homeOf(persona)} className="mt-4 inline-block text-sm text-neutral-600 underline hover:text-ink">
+        Or go back to {persona.name}&apos;s view
+      </Link>
     </Card>
   );
 }

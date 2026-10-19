@@ -79,7 +79,7 @@ Five synthetic operators report in five shapes: JSON with Spanish codes, a porta
 
 **Limitations**
 - The AI is simulated with templates and rules. The search understands a fixed vocabulary of countries, sites, customers, time windows and problems; anything else is reported as "not used" rather than guessed.
-- The demo state lives in memory: a full page reload resets the clock, the persona and the messages sent.
+- The demo state (clock, persona, messages sent) lives in the browser tab, not on a server: each reviewer has their own demo.
 - The ETA model is a heuristic standing in for a trained model.
 - Accessibility is limited to sensible defaults (semantic HTML, labels, focus states); there was no audit.
 

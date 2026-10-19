@@ -14,7 +14,7 @@ export function BriefingCard({ snapshots, now, scopeKey }: { snapshots: Shipment
     <Card className="p-5">
       <div className="mb-3 flex flex-wrap items-center gap-2">
         <AiTag label="Briefing" />
-        <span className="text-xs text-slate-500">as of {formatDateTime(now)}</span>
+        <span className="text-xs text-neutral-500">as of {formatDateTime(now)}</span>
       </div>
       {!b ? (
         <div className="space-y-2" aria-busy="true" aria-label="Writing the briefing">
@@ -24,21 +24,21 @@ export function BriefingCard({ snapshots, now, scopeKey }: { snapshots: Shipment
         </div>
       ) : (
         <>
-          <p className="text-lg font-medium leading-snug text-slate-900">{b.headline}</p>
+          <p className="text-lg font-medium leading-snug text-neutral-900">{b.headline}</p>
           {b.items.length > 0 && (
-            <ol className="mt-3 space-y-1.5 text-sm text-slate-700">
+            <ol className="mt-3 space-y-1.5 text-sm text-neutral-700">
               {b.items.map((item) => (
                 <li key={item.shipmentId} className="flex gap-2">
-                  <span className="text-slate-400">•</span>
-                  <Link href={`/ops/shipments/${item.shipmentId}`} className="hover:text-slate-950 hover:underline">
+                  <span className="text-neutral-400">•</span>
+                  <Link href={`/ops/shipments/${item.shipmentId}`} className="hover:text-neutral-950 hover:underline">
                     {item.text}
                   </Link>
                 </li>
               ))}
             </ol>
           )}
-          <details className="mt-3 text-xs text-slate-500">
-            <summary className="cursor-pointer hover:text-slate-800">Facts this summary was written from</summary>
+          <details className="mt-3 text-xs text-neutral-500">
+            <summary className="cursor-pointer hover:text-neutral-800">Facts this summary was written from</summary>
             <ul className="mt-1 list-disc pl-5">
               {b.facts.map((f) => (
                 <li key={f}>{f}</li>

@@ -1,6 +1,8 @@
 "use client";
 
+import { useSyncExternalStore } from "react";
 import { create } from "zustand";
+import { createJSONStorage, persist } from "zustand/middleware";
 import type { DraftMessage } from "@/ai";
 import { personaById } from "@/data/personas";
 
@@ -22,14 +24,38 @@ interface DemoState {
   reset: () => void;
 }
 
-export const useDemo = create<DemoState>((set) => ({
-  clockH: 0,
-  personaId: "lucia",
-  sent: [],
-  setPersona: (personaId) => set({ personaId }),
-  advance: (hours) => set((s) => ({ clockH: s.clockH + hours })),
-  send: (messages) => set((s) => ({ sent: [...s.sent, ...messages] })),
-  reset: () => set({ clockH: 0, sent: [] }),
-}));
+/**
+ * Kept in sessionStorage so a reload or a typed URL keeps the persona, clock and sent messages;
+ * "Reset" goes back to the start. Rehydrated after mount (see `useDemoHydration`) so the
+ * prerendered HTML and the first client render match.
+ */
+export const useDemo = create<DemoState>()(
+  persist(
+    (set) => ({
+      clockH: 0,
+      personaId: "lucia",
+      sent: [],
+      setPersona: (personaId) => set({ personaId }),
+      advance: (hours) => set((s) => ({ clockH: s.clockH + hours })),
+      send: (messages) => set((s) => ({ sent: [...s.sent, ...messages] })),
+      reset: () => set({ clockH: 0, sent: [] }),
+    }),
+    {
+      name: "shipment-demo",
+      storage: createJSONStorage(() => sessionStorage),
+      partialize: ({ clockH, personaId, sent }) => ({ clockH, personaId, sent }),
+      skipHydration: true,
+    },
+  ),
+);
+
+/** True once the stored demo state has been loaded in the browser. */
+export function useDemoHydrated() {
+  return useSyncExternalStore(
+    (onChange) => useDemo.persist.onFinishHydration(onChange),
+    () => useDemo.persist.hasHydrated(),
+    () => false,
+  );
+}
 
 export const usePersona = () => personaById(useDemo((s) => s.personaId));

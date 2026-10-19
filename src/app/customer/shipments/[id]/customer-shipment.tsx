@@ -31,7 +31,7 @@ function Detail({ id }: { id: string }) {
   // Same answer whether the shipment does not exist or belongs to someone else.
   if (!s) {
     return (
-      <Card className="p-6 text-sm text-slate-600">
+      <Card className="p-6 text-sm text-neutral-600">
         Shipment not found. <Link href="/customer" className="underline">Back to your shipments</Link>
       </Card>
     );
@@ -43,17 +43,17 @@ function Detail({ id }: { id: string }) {
 
   return (
     <div className="space-y-6">
-      <Link href="/customer" className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-slate-900">
+      <Link href="/customer" className="inline-flex items-center gap-1 text-sm text-neutral-500 hover:text-neutral-900">
         <ArrowLeft className="size-4" aria-hidden /> Your shipments
       </Link>
 
       <Card className="space-y-4 p-5">
         <div>
           <div className="flex flex-wrap items-center gap-2">
-            <h1 className="text-xl font-semibold text-slate-900">Order {sh.orderNumber}</h1>
+            <h1 className="text-xl font-semibold text-neutral-900">Order {sh.orderNumber}</h1>
             <StatusBadge status={s.status} />
           </div>
-          <p className="text-sm text-slate-600">
+          <p className="text-sm text-neutral-600">
             {sh.goods} · from {siteById(sh.originSiteId).city} to {sh.destination.name} · ref. {sh.reference}
           </p>
         </div>
@@ -78,12 +78,12 @@ function Detail({ id }: { id: string }) {
         </section>
         <section>
           <SectionTitle>Documents</SectionTitle>
-          <Card className="divide-y divide-slate-100">
+          <Card className="divide-y divide-neutral-100">
             {docs.map((d) => (
               <div key={d.kind} className="flex items-center gap-2 px-4 py-2 text-sm">
-                <FileText className="size-4 text-slate-400" aria-hidden />
-                <span className="text-slate-800">{d.name}</span>
-                <span className="ml-auto text-xs text-slate-400">{formatDay(d.uploadedAt)}</span>
+                <FileText className="size-4 text-neutral-400" aria-hidden />
+                <span className="text-neutral-800">{d.name}</span>
+                <span className="ml-auto text-xs text-neutral-400">{formatDay(d.uploadedAt)}</span>
               </div>
             ))}
           </Card>

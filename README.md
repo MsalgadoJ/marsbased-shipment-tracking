@@ -17,7 +17,7 @@ pnpm build
 
 ## Demo script (about 5 minutes)
 
-The demo clock starts on Monday 19 October 2026, 08:00 (Valencia). It lives in memory, so a full page reload resets it.
+The demo clock starts on Monday 19 October 2026, 08:00 (Valencia). The clock, the persona and the messages sent are kept for the browser tab, so a reload or a typed URL does not lose them; "Reset" goes back to the start.
 
 1. **Pick Lucía Ferrer** (operations, Paterna and Zaragoza). The briefing summarises what needs attention, and the queue shows the customs hold, the unrecognised ocean status, the failed delivery, the revised sea ETA and the silent road carrier, each with its cause and next step.
 2. **Open SH-1042** (order 12345). The timeline runs road → sea → customs, and each milestone sits next to the raw event from its operator (JSON codes, EDI, emails parsed by the AI layer). The date is an **estimate** (range, confidence, reasons), because no operator has confirmed one.

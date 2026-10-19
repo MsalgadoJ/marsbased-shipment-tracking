@@ -35,8 +35,8 @@ function CustomerHome() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-xl font-semibold text-slate-900">Hello {persona.name.split(" ")[0]}</h1>
-        <p className="text-sm text-slate-600">
+        <h1 className="text-xl font-semibold text-neutral-900">Hello {persona.name.split(" ")[0]}</h1>
+        <p className="text-sm text-neutral-600">
           {customer.name}: {active.length} shipment{active.length === 1 ? "" : "s"} on the way
           {late > 0 ? `, ${late} later than planned` : active.length > 0 ? ", all on time" : ""}.
         </p>
@@ -51,22 +51,22 @@ function CustomerHome() {
                 <BellRing className={n.kind === "delivered" ? "size-5 text-emerald-600" : "size-5 text-orange-600"} aria-hidden />
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
-                    <Link href={`/customer/shipments/${n.shipmentId}`} className="font-medium text-slate-900 hover:underline">
+                    <Link href={`/customer/shipments/${n.shipmentId}`} className="font-medium text-neutral-900 hover:underline">
                       {n.title}
                     </Link>
                     <AiTag label="Written by AI from tracking data" />
                   </div>
-                  <p className="text-sm text-slate-700">{n.body}</p>
+                  <p className="text-sm text-neutral-700">{n.body}</p>
                 </div>
               </Card>
             ))}
             {messages.map((m) => (
               <Card key={m.subject} className="flex gap-3 p-4">
-                <Mail className="size-5 text-slate-500" aria-hidden />
+                <Mail className="size-5 text-neutral-500" aria-hidden />
                 <div className="min-w-0 flex-1">
-                  <p className="font-medium text-slate-900">{m.subject}</p>
-                  <p className="text-xs text-slate-500">From the logistics team · {formatDateTime(iso(m.sentAtH))}</p>
-                  <p className="mt-1 text-sm whitespace-pre-line text-slate-700">{m.body}</p>
+                  <p className="font-medium text-neutral-900">{m.subject}</p>
+                  <p className="text-xs text-neutral-500">From the logistics team · {formatDateTime(iso(m.sentAtH))}</p>
+                  <p className="mt-1 text-sm whitespace-pre-line text-neutral-700">{m.body}</p>
                 </div>
               </Card>
             ))}
