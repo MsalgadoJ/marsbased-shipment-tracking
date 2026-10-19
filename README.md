@@ -34,7 +34,7 @@ The demo clock starts on Monday 19 October 2026, 08:00 (Valencia). The clock, th
 
 - **Perimeter.** As Amelia, open `/customer/shipments/SH-1051` (another customer's): "Shipment not found". As Lucía, search `SH-1078` (an Aveiro shipment) and `SH-9999` (none): the same answer for both.
 - **Search.** "patata" is reported as not usable instead of guessed. Emptying the box or "Clear filters" brings back every shipment; switching persona starts a clean search.
-- **Dates.** SH-1042 shows only an estimate. SH-1051 shows the operator's date and, next to it, the estimate that doubts it. A customer always sees one date.
+- **Dates.** SH-1042 shows only an estimate. SH-1051 shows the operator's date flagged "may slip" (the feed has gone quiet) and, in its detail, the estimate that doubts it. A customer always sees one date.
 - **State.** A reload or a typed URL keeps the clock, persona and sent messages; "Reset" goes back to Monday 08:00.
 - **Keyboard and mobile.** Tab reaches every control with a visible focus ring. At 390 px there is no horizontal scroll.
 

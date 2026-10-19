@@ -1,7 +1,7 @@
 import { operatorById } from "@/data/reference";
 import { formatDateTime, formatDay } from "@/domain/format";
 import type { EtaView, Shipment } from "@/domain/types";
-import { confidenceRange, CUSTOMER_CONFIDENCE_HINT } from "./shipment-bits";
+import { confidenceRange, confirmationInDoubt, CUSTOMER_CONFIDENCE_HINT } from "./shipment-bits";
 import { AiTag, Badge } from "./ui";
 
 /**
@@ -24,15 +24,18 @@ export function EtaPanel({ eta, shipment, showReasons = true }: { eta: EtaView; 
   }
   const { confirmed, estimate } = eta;
   const disagree = Boolean(confirmed && estimate && formatDay(confirmed.date) !== formatDay(estimate.date));
-  const doubtful = Boolean(estimate && estimate.confidence !== "high");
-  const showEstimate = estimate && (!confirmed || (showReasons && (disagree || doubtful)));
+  const showEstimate = estimate && (!confirmed || (showReasons && confirmationInDoubt(eta)));
 
   return (
     <div className={showEstimate && confirmed ? "grid gap-3 sm:grid-cols-2" : ""}>
       {confirmed && (
         <div className="rounded-lg p-3 text-sm ring-1 ring-slate-200">
           <div className="mb-1 flex items-center gap-2">
-            <Badge tone="ok">Confirmed</Badge>
+            {showReasons && confirmationInDoubt(eta) ? (
+              <Badge tone="medium">Confirmed · may slip</Badge>
+            ) : (
+              <Badge tone="ok">Confirmed</Badge>
+            )}
             <span className="text-xs text-slate-500">stated by the operator</span>
           </div>
           <p className="text-lg font-semibold text-slate-900">{formatDay(confirmed.date)}</p>

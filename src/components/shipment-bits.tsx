@@ -71,6 +71,16 @@ export const CUSTOMER_CONFIDENCE_HINT: Record<Confidence, string> = {
   low: "Low confidence: this date may move by a few days. We will tell you as soon as we know more.",
 };
 
+/**
+ * An operator's date that our own estimate doubts: it falls on another day, or the estimate is not
+ * high confidence (a quiet feed, an unread status, a hold). Operations see it flagged; the date
+ * itself stays the operator's.
+ */
+export function confirmationInDoubt({ confirmed, estimate }: EtaView): boolean {
+  if (!confirmed || !estimate) return false;
+  return formatDay(confirmed.date) !== formatDay(estimate.date) || estimate.confidence !== "high";
+}
+
 export function EtaBadge({
   eta,
   compact = false,
@@ -88,10 +98,20 @@ export function EtaBadge({
     );
   }
   if (eta.confirmed) {
+    const label = `Confirmed${compact ? "" : ` by ${operatorById(eta.confirmed.operatorId).name}`}`;
+    const doubt = audience === "ops" && confirmationInDoubt(eta);
     return (
       <span className="inline-flex flex-wrap items-center gap-1.5 text-sm">
         <span className="font-medium text-slate-900">{formatDay(eta.confirmed.date)}</span>
-        <Badge tone="ok">Confirmed{compact ? "" : ` by ${operatorById(eta.confirmed.operatorId).name}`}</Badge>
+        {doubt && eta.estimate ? (
+          <Hint
+            text={`The operator confirmed this date, but the latest signals put it in doubt: it could be as late as ${formatDay(eta.estimate.latest)}. Open the shipment to see why.`}
+          >
+            <Badge tone="medium">{label} · may slip</Badge>
+          </Hint>
+        ) : (
+          <Badge tone="ok">{label}</Badge>
+        )}
         {eta.delayDays > 0 && <span className="text-xs font-medium text-orange-700">+{eta.delayDays}d</span>}
       </span>
     );
