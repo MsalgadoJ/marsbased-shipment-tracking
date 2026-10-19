@@ -74,13 +74,13 @@ Five synthetic operators report in five shapes: JSON with Spanish codes, a porta
 
 **Assumptions**
 - One shipment is one order to one destination; no split or consolidated shipments.
-- Customers see operator names and estimate confidence (high / medium / low), but not internal notes, stale feeds or unrecognised codes.
+- Customers see operator names and the estimate's confidence (high / medium / low), but not the operational signals behind them: silent feeds, unrecognised status codes, the operators' raw messages, the reasons for an estimate, customs paperwork or the team's messages to operators.
 - Customs is required for destinations outside the EU, and a missing certificate of origin is the typical blocker.
 
 **Limitations**
 - The AI is simulated with templates and rules. The search understands a fixed vocabulary of countries, sites, customers, time windows and problems; anything else is reported as "not used" rather than guessed.
 - The demo state (clock, persona, messages sent) lives in the browser tab, not on a server: each reviewer has their own demo.
-- The ETA model is a heuristic standing in for a trained model.
+- The ETA uses simple rules in place of a trained model: planned leg durations, plus any delay so far carried over to the next legs, with a fixed range for each confidence level.
 - Accessibility is limited to sensible defaults (semantic HTML, labels, focus states); there was no audit.
 
 **Next steps, in order**
