@@ -142,6 +142,9 @@ export function SearchBar({
           <span className="text-xs text-slate-500">
             {results.length} result{results.length === 1 ? "" : "s"}
           </span>
+          <button type="button" onClick={clear} className="text-xs font-medium text-slate-600 underline hover:text-slate-900">
+            Clear filters
+          </button>
           {parsed && parsed.ignored.length > 0 && (
             <Badge tone="medium">Not used: {parsed.ignored.join(", ")}</Badge>
           )}

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { RequirePersona } from "@/components/app-header";
 import { BriefingCard } from "@/components/briefing-card";
-import { ExceptionQueue } from "@/components/exception-queue";
+import { ExceptionQueue, SeverityLegend } from "@/components/exception-queue";
 import { PortfolioTable } from "@/components/portfolio-table";
 import { SearchBar } from "@/components/search-bar";
 import { SectionTitle } from "@/components/ui";
@@ -32,14 +32,16 @@ function OpsHome() {
       <BriefingCard snapshots={snapshots} now={now} scopeKey={persona.id} />
 
       <section>
-        <SectionTitle aside={<span className="text-xs text-slate-500">most urgent first</span>}>
-          Needs attention ({queueCount})
+        <SectionTitle aside={<SeverityLegend />}>
+          Needs attention ({queueCount}) <span className="font-normal normal-case tracking-normal">· most urgent first</span>
         </SectionTitle>
         <ExceptionQueue snapshots={snapshots} />
       </section>
 
       <section>
-        <SectionTitle>All shipments ({snapshots.length})</SectionTitle>
+        <SectionTitle>
+          {filter ? `Showing ${results.length} of ${snapshots.length} shipments` : `All shipments (${snapshots.length})`}
+        </SectionTitle>
         <div className="mb-3">
           <SearchBar filter={filter} onFilter={setFilter} results={results} />
         </div>

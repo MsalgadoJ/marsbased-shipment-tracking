@@ -5,12 +5,32 @@ import Link from "next/link";
 import { useState } from "react";
 import { mockAi } from "@/ai";
 import { customerById } from "@/data/reference";
-import type { ShipmentSnapshot } from "@/domain/types";
+import type { Severity, ShipmentSnapshot } from "@/domain/types";
 import { EXCEPTION_LABEL } from "@/ai/query";
 import { useDemo } from "@/store/demo";
 import { ActionPanel, actionKey } from "./action-panel";
 import { EtaBadge, Modes, Route, SEVERITY_TONE } from "./shipment-bits";
 import { Badge, Button, Card } from "./ui";
+
+/** Card edge by the shipment's most severe exception, so the queue can be scanned at a glance. */
+export const SEVERITY_EDGE: Record<Severity, { edge: string; dot: string; label: string }> = {
+  critical: { edge: "border-l-red-600", dot: "bg-red-600", label: "Critical" },
+  high: { edge: "border-l-orange-500", dot: "bg-orange-500", label: "High" },
+  medium: { edge: "border-l-amber-300", dot: "bg-amber-300", label: "Medium" },
+};
+
+export function SeverityLegend() {
+  return (
+    <span className="flex items-center gap-3 text-xs text-slate-500">
+      {Object.values(SEVERITY_EDGE).map((v) => (
+        <span key={v.label} className="inline-flex items-center gap-1">
+          <span className={`size-2 rounded-full ${v.dot}`} aria-hidden />
+          {v.label}
+        </span>
+      ))}
+    </span>
+  );
+}
 
 /** Shipments with open exceptions, most urgent first. Each shows its causes and the proposed next step. */
 export function ExceptionQueue({ snapshots }: { snapshots: ShipmentSnapshot[] }) {
@@ -28,9 +48,12 @@ export function ExceptionQueue({ snapshots }: { snapshots: ShipmentSnapshot[] })
         const action = mockAi.proposeAction(s);
         const handled = action && sent.some((m) => m.actionId === action.id);
         const isOpen = open === s.shipment.id;
+        // Exceptions come sorted by severity, so the first one is the worst.
+        const worst = SEVERITY_EDGE[s.exceptions[0].severity];
         return (
           <li key={s.shipment.id}>
-            <Card className="p-4">
+            <Card className={`border-l-4 p-4 ${worst.edge}`}>
+              <span className="sr-only">{worst.label} priority. </span>
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div className="min-w-0 space-y-1">
                   <div className="flex flex-wrap items-center gap-2">
