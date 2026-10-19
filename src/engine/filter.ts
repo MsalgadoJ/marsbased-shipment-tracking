@@ -28,7 +28,7 @@ export function bestDeliveryDate(s: ShipmentSnapshot): string {
 }
 
 export const isLate = (s: ShipmentSnapshot) =>
-  s.eta.delayDays >= 1 || s.exceptions.some((e) => e.type === "delay_risk");
+  s.eta.delayDays >= 1 || s.exceptions.some((e) => e.type === "delayed" || e.type === "delay_risk");
 
 const shiftDay = (key: string, days: number) => new Date(Date.parse(key) + days * DAY).toISOString().slice(0, 10);
 

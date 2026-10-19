@@ -58,6 +58,13 @@ describe("exceptions at the demo start", () => {
     expect(types(get("SH-1051"))).toEqual(expect.arrayContaining(["stale", "delay_risk"]));
   });
 
+  it("calls a late date the operator confirmed a delay, and an estimated one a risk", () => {
+    expect(types(get("SH-1060"))).toContain("delayed");
+    expect(types(get("SH-1060"))).not.toContain("delay_risk");
+    expect(types(get("SH-1047"))).toContain("delay_risk");
+    expect(types(get("SH-1047"))).not.toContain("delayed");
+  });
+
   it("leaves on-time shipments alone", () => {
     expect(get("SH-1055").exceptions).toEqual([]);
     expect(get("SH-1074").status).toBe("planned");

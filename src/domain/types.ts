@@ -151,6 +151,7 @@ export interface EtaView {
 export type ExceptionType =
   | "customs_hold"
   | "delivery_failed"
+  | "delayed"
   | "delay_risk"
   | "stale"
   | "missing_document"

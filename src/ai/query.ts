@@ -144,6 +144,7 @@ const ARRIVING_LABEL: Record<NonNullable<ShipmentFilter["arriving"]>, string> = 
 const EXCEPTION_LABEL: Record<ExceptionType, string> = {
   customs_hold: "Customs hold",
   delivery_failed: "Failed delivery",
+  delayed: "Delayed",
   delay_risk: "Delay risk",
   stale: "No recent update",
   missing_document: "Missing document",

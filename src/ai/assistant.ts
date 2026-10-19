@@ -111,7 +111,7 @@ export function briefing(snapshots: ShipmentSnapshot[], now: string): Briefing {
  * Which exception to act on first. Not always the most severe one: facts come before messages,
  * so an unclear or silent feed is chased before the customer is given a new date.
  */
-const ACTION_ORDER: ExceptionType[] = ["customs_hold", "delivery_failed", "unmapped_event", "stale", "delay_risk", "missing_document"];
+const ACTION_ORDER: ExceptionType[] = ["customs_hold", "delivery_failed", "unmapped_event", "stale", "delayed", "delay_risk", "missing_document"];
 
 function actionable(s: ShipmentSnapshot): ShipmentException | undefined {
   return [...s.exceptions].sort((a, b) => ACTION_ORDER.indexOf(a.type) - ACTION_ORDER.indexOf(b.type))[0];
@@ -218,6 +218,7 @@ export function proposeAction(s: ShipmentSnapshot): ProposedAction | undefined {
         ],
       };
     }
+    case "delayed":
     case "delay_risk":
       if (s.eta.delayDays < 1) {
         return {

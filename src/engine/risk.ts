@@ -44,8 +44,9 @@ export function detectExceptions(
   }
 
   if (eta.delayDays >= 1) {
+    // A late date the operator has confirmed is a delay; one we only estimate is a risk.
     out.push({
-      type: "delay_risk",
+      type: eta.confirmed ? "delayed" : "delay_risk",
       severity: eta.delayDays >= 3 ? "high" : "medium",
       cause: `${eta.delayDays} day${eta.delayDays > 1 ? "s" : ""} late against the planned delivery (${eta.confirmed ? `confirmed by ${operatorById(eta.confirmed.operatorId).name}` : "estimated"})`,
       since: now,
