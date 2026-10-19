@@ -19,7 +19,7 @@ export function ExceptionQueue({ snapshots }: { snapshots: ShipmentSnapshot[] })
   const sent = useDemo((s) => s.sent);
 
   if (queue.length === 0) {
-    return <Card className="p-6 text-center text-sm text-neutral-500">Nothing needs attention right now.</Card>;
+    return <Card className="p-6 text-center text-sm text-slate-500">Nothing needs attention right now.</Card>;
   }
 
   return (
@@ -34,14 +34,14 @@ export function ExceptionQueue({ snapshots }: { snapshots: ShipmentSnapshot[] })
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div className="min-w-0 space-y-1">
                   <div className="flex flex-wrap items-center gap-2">
-                    <Link href={`/ops/shipments/${s.shipment.id}`} className="font-semibold text-neutral-900 hover:underline">
+                    <Link href={`/ops/shipments/${s.shipment.id}`} className="font-semibold text-slate-900 hover:underline">
                       {s.shipment.reference}
                     </Link>
-                    <span className="text-sm text-neutral-500">Order {s.shipment.orderNumber}</span>
-                    <span className="text-sm text-neutral-700">{customerById(s.shipment.customerId).name}</span>
+                    <span className="text-sm text-slate-500">Order {s.shipment.orderNumber}</span>
+                    <span className="text-sm text-slate-700">{customerById(s.shipment.customerId).name}</span>
                     <Modes s={s} />
                   </div>
-                  <p className="text-xs text-neutral-500">
+                  <p className="text-xs text-slate-500">
                     <Route s={s} />
                   </p>
                 </div>
@@ -52,16 +52,16 @@ export function ExceptionQueue({ snapshots }: { snapshots: ShipmentSnapshot[] })
                 {s.exceptions.map((e) => (
                   <li key={e.type} className="flex flex-wrap items-baseline gap-2 text-sm">
                     <Badge tone={SEVERITY_TONE[e.severity]}>{EXCEPTION_LABEL[e.type]}</Badge>
-                    <span className="text-neutral-700">{e.cause}</span>
+                    <span className="text-slate-700">{e.cause}</span>
                   </li>
                 ))}
               </ul>
 
               {action && (
-                <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-neutral-100 pt-3">
+                <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-slate-100 pt-3">
                   <p className="text-sm">
-                    <span className="text-neutral-500">Next step: </span>
-                    <span className="font-medium text-neutral-900">{action.title}</span>
+                    <span className="text-slate-500">Next step: </span>
+                    <span className="font-medium text-slate-900">{action.title}</span>
                     {handled && <Badge tone="ok" className="ml-2">Sent</Badge>}
                   </p>
                   <Button onClick={() => setOpen(isOpen ? undefined : s.shipment.id)} aria-expanded={isOpen}>

@@ -66,15 +66,15 @@ export function SearchBar({
       >
         <label className="relative flex-1">
           <span className="sr-only">Search shipments in plain language</span>
-          <Search className="pointer-events-none absolute top-2.5 left-3 size-4 text-neutral-400" aria-hidden />
+          <Search className="pointer-events-none absolute top-2.5 left-3 size-4 text-slate-400" aria-hidden />
           <input
             value={text}
             onChange={(e) => setText(e.target.value)}
             placeholder="Ask in plain language, e.g. shipments to France this week running late"
-            className="w-full rounded-lg border border-neutral-300 bg-white py-2 pr-9 pl-9 text-sm shadow-sm focus:border-neutral-500 focus:outline-none"
+            className="w-full rounded-lg border border-slate-300 bg-white py-2 pr-9 pl-9 text-sm shadow-sm focus:border-slate-500 focus:outline-none"
           />
           {text && (
-            <button type="button" onClick={clear} className="absolute top-2 right-2 rounded p-0.5 text-neutral-400 hover:text-neutral-700" aria-label="Clear search">
+            <button type="button" onClick={clear} className="absolute top-2 right-2 rounded p-0.5 text-slate-400 hover:text-slate-700" aria-label="Clear search">
               <X className="size-4" />
             </button>
           )}
@@ -85,10 +85,10 @@ export function SearchBar({
       </form>
 
       {!parsed && !busy && (
-        <div className="flex flex-wrap items-center gap-2 text-xs text-neutral-500">
+        <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500">
           Try:
           {QUERY_EXAMPLES.map((q) => (
-            <button key={q} type="button" onClick={() => run(q)} className="rounded-full bg-neutral-100 px-2.5 py-1 text-neutral-700 hover:bg-neutral-200">
+            <button key={q} type="button" onClick={() => run(q)} className="rounded-full bg-slate-100 px-2.5 py-1 text-slate-700 hover:bg-slate-200">
               {q}
             </button>
           ))}
@@ -106,13 +106,13 @@ export function SearchBar({
         <div className="flex flex-wrap items-center gap-2">
           <AiTag label="Understood as" />
           {chips.map((c) => (
-            <span key={c.key} className="inline-flex items-center gap-1 rounded-full bg-neutral-900 py-0.5 pr-1 pl-2.5 text-xs text-white">
+            <span key={c.key} className="inline-flex items-center gap-1 rounded-full bg-slate-900 py-0.5 pr-1 pl-2.5 text-xs text-white">
               {isEditable(c.key) ? (
                 <select
                   aria-label={`Change ${c.label}`}
                   value={filter![c.key]}
                   onChange={(e) => setKey(c.key, e.target.value)}
-                  className="field-sizing-content cursor-pointer bg-transparent text-xs text-white focus:outline-none [&>option]:text-neutral-900"
+                  className="field-sizing-content cursor-pointer bg-transparent text-xs text-white focus:outline-none [&>option]:text-slate-900"
                 >
                   {FILTER_OPTIONS[c.key].map((o) => (
                     <option key={o.value} value={o.value}>
@@ -128,7 +128,7 @@ export function SearchBar({
               </button>
             </span>
           ))}
-          <span className="text-xs text-neutral-500">
+          <span className="text-xs text-slate-500">
             {results.length} result{results.length === 1 ? "" : "s"}
           </span>
           {parsed && parsed.ignored.length > 0 && (
@@ -138,12 +138,12 @@ export function SearchBar({
       )}
 
       {lookup && (
-        <div className="rounded-lg border border-violet-200 bg-violet-50/40 p-3 text-sm text-neutral-800">
+        <div className="rounded-lg border border-violet-200 bg-violet-50/40 p-3 text-sm text-slate-800">
           <div className="mb-1">
             <AiTag label="Answer" />
           </div>
           <p>{mockAi.explainShipment(lookup)}</p>
-          <Link href={`/ops/shipments/${lookup.shipment.id}`} className="mt-2 inline-block font-medium text-neutral-900 underline">
+          <Link href={`/ops/shipments/${lookup.shipment.id}`} className="mt-2 inline-block font-medium text-slate-900 underline">
             Open {lookup.shipment.reference}
           </Link>
         </div>

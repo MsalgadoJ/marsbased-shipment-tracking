@@ -32,7 +32,7 @@ function OpsHome() {
       <BriefingCard snapshots={snapshots} now={now} scopeKey={persona.id} />
 
       <section>
-        <SectionTitle aside={<span className="text-xs text-neutral-500">most urgent first</span>}>
+        <SectionTitle aside={<span className="text-xs text-slate-500">most urgent first</span>}>
           Needs attention ({queueCount})
         </SectionTitle>
         <ExceptionQueue snapshots={snapshots} />

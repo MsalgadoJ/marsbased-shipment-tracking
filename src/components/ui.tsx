@@ -6,11 +6,11 @@ import { twMerge } from "tailwind-merge";
 export const cn = (...inputs: ClassValue[]) => twMerge(clsx(inputs));
 
 export function Card({ className, children }: { className?: string; children: ReactNode }) {
-  return <section className={cn("rounded-xl border border-neutral-200 bg-white shadow-sm", className)}>{children}</section>;
+  return <section className={cn("rounded-xl border border-slate-200 bg-white shadow-sm", className)}>{children}</section>;
 }
 
 const TONES = {
-  neutral: "bg-neutral-100 text-neutral-700 ring-neutral-200",
+  neutral: "bg-slate-100 text-slate-700 ring-slate-200",
   critical: "bg-red-50 text-red-700 ring-red-200",
   high: "bg-orange-50 text-orange-700 ring-orange-200",
   medium: "bg-amber-50 text-amber-800 ring-amber-200",
@@ -21,19 +21,9 @@ const TONES = {
 
 export type Tone = keyof typeof TONES;
 
-export function Badge({
-  tone = "neutral",
-  className,
-  title,
-  children,
-}: {
-  tone?: Tone;
-  className?: string;
-  title?: string;
-  children: ReactNode;
-}) {
+export function Badge({ tone = "neutral", className, children }: { tone?: Tone; className?: string; children: ReactNode }) {
   return (
-    <span title={title} className={cn("inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium ring-1 ring-inset whitespace-nowrap", TONES[tone], className)}>
+    <span className={cn("inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium ring-1 ring-inset whitespace-nowrap", TONES[tone], className)}>
       {children}
     </span>
   );
@@ -50,9 +40,9 @@ export function AiTag({ label = "AI" }: { label?: string }) {
 }
 
 const BUTTONS = {
-  primary: "bg-brand text-white hover:bg-brand-hover disabled:bg-neutral-300",
-  secondary: "bg-white text-neutral-800 ring-1 ring-inset ring-neutral-300 hover:bg-neutral-50 disabled:text-neutral-400",
-  ghost: "text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900",
+  primary: "bg-slate-900 text-white hover:bg-slate-700 disabled:bg-slate-300",
+  secondary: "bg-white text-slate-800 ring-1 ring-inset ring-slate-300 hover:bg-slate-50 disabled:text-slate-400",
+  ghost: "text-slate-600 hover:bg-slate-100 hover:text-slate-900",
 } as const;
 
 export function Button({
@@ -74,13 +64,13 @@ export function Button({
 }
 
 export function Skeleton({ className }: { className?: string }) {
-  return <div className={cn("animate-pulse rounded bg-neutral-200", className)} />;
+  return <div className={cn("animate-pulse rounded bg-slate-200", className)} />;
 }
 
 export function SectionTitle({ children, aside }: { children: ReactNode; aside?: ReactNode }) {
   return (
     <div className="mb-3 flex items-center justify-between gap-2">
-      <h2 className="text-sm font-semibold uppercase tracking-wide text-neutral-500">{children}</h2>
+      <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500">{children}</h2>
       {aside}
     </div>
   );

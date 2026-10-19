@@ -28,8 +28,8 @@ export default function Home() {
   return (
     <div className="mx-auto max-w-3xl space-y-6 py-6">
       <div>
-        <h1 className="text-2xl font-semibold text-neutral-900">One view of every shipment</h1>
-        <p className="mt-1 text-neutral-600">
+        <h1 className="text-2xl font-semibold text-slate-900">One view of every shipment</h1>
+        <p className="mt-1 text-slate-600">
           Prototype with synthetic data: 3 sites, 5 logistics operators reporting in 5 different formats, road and sea legs.
           Pick who you are. The demo clock in the bar above moves time forward and brings in new operator updates.
         </p>
@@ -37,10 +37,10 @@ export default function Home() {
       {GROUPS.map(({ kind, title, blurb, icon: Icon }) => (
         <Card key={kind} className="p-5">
           <div className="mb-3 flex items-start gap-3">
-            <Icon className="mt-0.5 size-5 text-neutral-500" aria-hidden />
+            <Icon className="mt-0.5 size-5 text-slate-500" aria-hidden />
             <div>
-              <h2 className="font-semibold text-neutral-900">{title}</h2>
-              <p className="text-sm text-neutral-600">{blurb}</p>
+              <h2 className="font-semibold text-slate-900">{title}</h2>
+              <p className="text-sm text-slate-600">{blurb}</p>
             </div>
           </div>
           <div className="grid gap-2 sm:grid-cols-2">
@@ -52,10 +52,10 @@ export default function Home() {
                   setPersona(p.id);
                   router.push(kind === "ops" ? "/ops" : "/customer");
                 }}
-                className="rounded-lg border border-neutral-200 px-3 py-2 text-left hover:border-neutral-400 hover:bg-neutral-50"
+                className="rounded-lg border border-slate-200 px-3 py-2 text-left hover:border-slate-400 hover:bg-slate-50"
               >
-                <span className="block text-sm font-medium text-neutral-900">{p.name}</span>
-                <span className="block text-xs text-neutral-500">{p.title}</span>
+                <span className="block text-sm font-medium text-slate-900">{p.name}</span>
+                <span className="block text-xs text-slate-500">{p.title}</span>
               </button>
             ))}
           </div>

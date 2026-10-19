@@ -5,14 +5,6 @@
   --font-mono: var(--font-geist-mono);
 }
 
-/* Brand accent taken from marsbased.com: red on near-black and neutral greys, kept light here. */
-@theme {
-  --color-brand: #ff0031;
-  --color-brand-hover: #e0002b;
-  --color-brand-soft: #fff0f3;
-  --color-ink: #242424;
-}
-
 body {
   font-family: var(--font-sans), system-ui, sans-serif;
 }
@@ -25,6 +17,6 @@ select:not(:disabled) {
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-brand);
+  outline: 2px solid var(--color-slate-900);
   outline-offset: 2px;
 }

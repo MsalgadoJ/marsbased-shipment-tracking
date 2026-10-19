@@ -1,7 +1,8 @@
 import { Anchor, CircleCheck, Ship, Truck } from "lucide-react";
 import { COUNTRY_NAMES, operatorById, siteById } from "@/data/reference";
 import { formatDateTime, formatDay } from "@/domain/format";
-import type { EtaView, Mode, Severity, ShipmentSnapshot, ShipmentStatus } from "@/domain/types";
+import type { Confidence, EtaView, Mode, Severity, ShipmentSnapshot, ShipmentStatus } from "@/domain/types";
+import { Hint } from "./hint";
 import { Badge, type Tone } from "./ui";
 
 export const SEVERITY_TONE: Record<Severity, Tone> = { critical: "critical", high: "high", medium: "medium" };
@@ -26,7 +27,7 @@ export function ModeIcon({ mode, className = "size-4" }: { mode: Mode; className
 export function Modes({ s }: { s: ShipmentSnapshot }) {
   const modes = s.shipment.legs.map((l) => l.mode);
   return (
-    <span className="inline-flex items-center gap-1 text-neutral-500">
+    <span className="inline-flex items-center gap-1 text-slate-500">
       {modes.map((m, i) => (
         <ModeIcon key={i} mode={m} className="size-3.5" />
       ))}
@@ -48,11 +49,37 @@ export function Route({ s }: { s: ShipmentSnapshot }) {
  * Confirmed and estimated dates never look the same: a confirmed date is a fact with a source,
  * an estimate is a range with a confidence.
  */
-/** What the confidence level means, shown on hover wherever an estimate appears. */
-export const CONFIDENCE_HINT =
-  "No operator has confirmed a date yet, so this is an estimate. Confidence says how far the real date may move: high, up to a day; low, up to four days, when the feed has gone quiet, a status was not recognised or the shipment is held.";
+/** What each confidence level means for operations: its cause and how far the date may move (`RANGE` in the ETA engine). */
+const CONFIDENCE: Record<Confidence, { cause: string; range: string }> = {
+  high: { cause: "the operator of the current leg has given an arrival time", range: "should hold within a day" },
+  medium: { cause: "it is worked out from the plan, as no operator has given a time for the current leg", range: "may move about a day, up to two at sea" },
+  low: { cause: "the feed has gone quiet, a status was not recognised or the shipment is held", range: "may move up to a day by road and up to four days at sea" },
+};
 
-export function EtaBadge({ eta, compact = false }: { eta: EtaView; compact?: boolean }) {
+const capital = (c: Confidence) => c[0].toUpperCase() + c.slice(1);
+
+/** Short line for the detail panel, where the specific reasons are listed right below. */
+export const confidenceRange = (c: Confidence) => `${capital(c)} confidence: the date ${CONFIDENCE[c].range}.`;
+
+/** Full explanation for the hover hint, where no reasons are shown. */
+export const confidenceHint = (c: Confidence) => `${capital(c)} confidence: ${CONFIDENCE[c].cause}, so the date ${CONFIDENCE[c].range}.`;
+
+/** Customer wording: how much the date may move, without internal signals (quiet feeds, unrecognised codes). */
+export const CUSTOMER_CONFIDENCE_HINT: Record<Confidence, string> = {
+  high: "High confidence: this date should hold within a day.",
+  medium: "Medium confidence: this date may move by about a day. We will tell you as soon as the carrier confirms it.",
+  low: "Low confidence: this date may move by a few days. We will tell you as soon as we know more.",
+};
+
+export function EtaBadge({
+  eta,
+  compact = false,
+  audience = "ops",
+}: {
+  eta: EtaView;
+  compact?: boolean;
+  audience?: "ops" | "customer";
+}) {
   if (eta.deliveredAt) {
     return (
       <span className="inline-flex items-center gap-1 text-sm text-emerald-700">
@@ -63,27 +90,29 @@ export function EtaBadge({ eta, compact = false }: { eta: EtaView; compact?: boo
   if (eta.confirmed) {
     return (
       <span className="inline-flex flex-wrap items-center gap-1.5 text-sm">
-        <span className="font-medium text-neutral-900">{formatDay(eta.confirmed.date)}</span>
+        <span className="font-medium text-slate-900">{formatDay(eta.confirmed.date)}</span>
         <Badge tone="ok">Confirmed{compact ? "" : ` by ${operatorById(eta.confirmed.operatorId).name}`}</Badge>
         {eta.delayDays > 0 && <span className="text-xs font-medium text-orange-700">+{eta.delayDays}d</span>}
       </span>
     );
   }
-  if (!eta.estimate) return <span className="text-sm text-neutral-400">—</span>;
+  if (!eta.estimate) return <span className="text-sm text-slate-400">—</span>;
   const { date, earliest, latest, confidence } = eta.estimate;
   const range = formatDay(earliest) === formatDay(latest) ? formatDay(date) : `${formatDay(earliest)} – ${formatDay(latest)}`;
   return (
     <span className="inline-flex flex-wrap items-center gap-1.5 text-sm">
-      <span className="font-medium italic text-neutral-700">~{formatDay(date)}</span>
-      <Badge tone={confidence === "low" ? "medium" : "neutral"} className="border-dashed" title={CONFIDENCE_HINT}>
-        Estimate · {confidence} confidence
-      </Badge>
+      <span className="font-medium italic text-slate-700">~{formatDay(date)}</span>
+      <Hint text={`Estimate, not yet confirmed by the carrier. ${audience === "ops" ? confidenceHint(confidence) : CUSTOMER_CONFIDENCE_HINT[confidence]}`}>
+        <Badge tone={confidence === "low" ? "medium" : "neutral"} className="border-dashed">
+          Estimate · {confidence} confidence
+        </Badge>
+      </Hint>
       {eta.delayDays > 0 && <span className="text-xs font-medium text-orange-700">+{eta.delayDays}d</span>}
-      {!compact && <span className="text-xs text-neutral-500">range {range}</span>}
+      {!compact && <span className="text-xs text-slate-500">range {range}</span>}
     </span>
   );
 }
 
 export function LastUpdate({ s }: { s: ShipmentSnapshot }) {
-  return <span className="text-xs text-neutral-500">{s.lastUpdate ? formatDateTime(s.lastUpdate) : "No updates yet"}</span>;
+  return <span className="text-xs text-slate-500">{s.lastUpdate ? formatDateTime(s.lastUpdate) : "No updates yet"}</span>;
 }
