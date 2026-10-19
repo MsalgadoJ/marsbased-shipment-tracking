@@ -1,7 +1,7 @@
 # Shipment tracking prototype: write-up
 
-Mayra Rincones · MarsBased technical test · 19 October 2026
-Repository: github.com/MsalgadoJ/marsbased-shipment-tracking · Demo script in the README
+Mayra Rincones · MarsBased technical test · 19 October 2026  
+Repository: [github.com/MsalgadoJ/marsbased-shipment-tracking](https://github.com/MsalgadoJ/marsbased-shipment-tracking) · Demo script in the README
 
 ## 1. The cut I chose, and why
 
@@ -52,7 +52,7 @@ The prioritisation also matters. When a shipment has an unclear or silent feed, 
 
 ```
 raw operator events (≤ demo clock)
-  → adapters, one per operator: raw → canonical milestone, or "unmapped" (never guessed)
+  → adapters, one per operator: raw → canonical milestone, or "unmapped"
   → consolidate: one timeline per shipment, events read in the context of their leg
   → ETA (confirmed vs estimated) + exception rules (deterministic)
   → AI layer: briefing, actions, drafts, notices, search (reads only this output)
@@ -68,7 +68,7 @@ Five synthetic operators report in five shapes: JSON with Spanish codes, a porta
 
 **Quality.** 41 Vitest tests cover each adapter, the unknown-status path, stale detection, confirmed vs estimated ETA, the search parser (including input it cannot use), the action priority and the persona perimeter, including that a search answers the same for another site's shipment and for one that does not exist. All dates are computed in Valencia time, so the tests do not depend on the machine's timezone. I also walked the demo script end to end with Playwright before delivering. That caught one framework issue: Next 16 with Cache Components requires `params` to be read inside Suspense.
 
-**How I worked with AI.** I used Claude Code throughout, following MarsBased's Research → Plan → Implement flow with review points. `docs/research.md` (problem, domain, scope cut) and `docs/plan.md` (architecture, steps with acceptance criteria, demo script) were reviewed before any code was written. Each step was committed separately with its tests, and `docs/timelog.md` records the time spent.
+**How I worked with AI.** I used Claude Code throughout, following MarsBased's Research → Plan → Implement flow with review points. `docs/research.md` (problem, domain, scope cut) and `docs/plan.md` (architecture, steps with acceptance criteria, demo script) were reviewed before any code was written. Each step was committed separately with its tests. Then I ran the demo by hand on desktop and mobile; that review led to the fixes at the end of the history (keyboard focus, clearer perimeter messages, how the delivery date is shown). `docs/timelog.md` records the time spent.
 
 ## 4. Assumptions, limitations and next steps
 
