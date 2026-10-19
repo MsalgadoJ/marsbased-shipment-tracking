@@ -66,7 +66,7 @@ Five synthetic operators report in five shapes: JSON with Spanish codes, a porta
 - When two parties confirm the same step (the trucker and the terminal, for example), it is one milestone with two sources.
 - An operator date that has already passed stops being a confirmation.
 
-**Quality.** 40 Vitest tests cover each adapter, the unknown-status path, stale detection, confirmed vs estimated ETA, the search parser (including input it cannot use), the action priority and the persona perimeter. All dates are computed in Valencia time, so the tests do not depend on the machine's timezone. I also walked the demo script end to end with Playwright before delivering. That caught one framework issue: Next 16 with Cache Components requires `params` to be read inside Suspense.
+**Quality.** 41 Vitest tests cover each adapter, the unknown-status path, stale detection, confirmed vs estimated ETA, the search parser (including input it cannot use), the action priority and the persona perimeter, including that a search answers the same for another site's shipment and for one that does not exist. All dates are computed in Valencia time, so the tests do not depend on the machine's timezone. I also walked the demo script end to end with Playwright before delivering. That caught one framework issue: Next 16 with Cache Components requires `params` to be read inside Suspense.
 
 **How I worked with AI.** I used Claude Code throughout, following MarsBased's Research → Plan → Implement flow with review points. `docs/research.md` (problem, domain, scope cut) and `docs/plan.md` (architecture, steps with acceptance criteria, demo script) were reviewed before any code was written. Each step was committed separately with its tests, and `docs/timelog.md` records the time spent.
 
